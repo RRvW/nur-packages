@@ -28,7 +28,7 @@
       inherit pyvhdlmodel pytooling pydecor;
     };
     pyghdl-mcode = pyghdl;
-    pyghdl-llvm = pyghdl.override {ghdl = pkgs.ghdl-llvm;};
+    # pyghdl-llvm = pyghdl.override {ghdl = pkgs.ghdl-llvm; }; # ghdl-llvm seems to be broken in nixpkgs :(
 
   };
   hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix {};

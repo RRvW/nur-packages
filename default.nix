@@ -32,4 +32,5 @@
 
   };
   hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix {};
+  symbolator = pkgs.python3.pkgs.callPackage ./pkgs/symbolator.nix {};
 }

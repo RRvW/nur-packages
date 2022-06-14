@@ -14,7 +14,22 @@
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  example-package = pkgs.callPackage ./pkgs/example-package { };
-  # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
-  # ...
+  vhdl_ls-bin = pkgs.callPackage ./pkgs/vhdl_ls-bin.nix { };
+  vhdl_lang-bin = pkgs.callPackage ./pkgs/vhdl_lang-bin.nix { };
+  # rust_hdl = pkgs.callPackage ./pkgs/rust_hdl {}; # broken
+
+  python3Packages = pkgs.recurseIntoAttrs rec {
+    pytooling = pkgs.python3.pkgs.callPackage ./pkgs/pytooling.nix { };
+    pyvhdlmodel = pkgs.python3.pkgs.callPackage ./pkgs/pyvhdlmodel.nix {
+      inherit pytooling;
+    };
+    pydecor = pkgs.python3.pkgs.callPackage ./pkgs/pydecor.nix {};
+    pyghdl = pkgs.python3.pkgs.callPackage ./pkgs/pyghdl.nix {
+      inherit pyvhdlmodel pytooling pydecor;
+    };
+    pyghdl-mcode = pyghdl;
+    pyghdl-llvm = pyghdl.override {ghdl = pkgs.ghdl-llvm;};
+
+  };
+  hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix {};
 }

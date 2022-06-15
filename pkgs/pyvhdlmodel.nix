@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pytooling, fetchFromGitHub, pythonAtLeast
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytooling
+, fetchFromGitHub
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {

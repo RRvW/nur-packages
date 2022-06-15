@@ -1,5 +1,10 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python3Packages, pytestCheckHook
-, ghdl }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, python3Packages
+, pytestCheckHook
+, ghdl
+}:
 
 buildPythonApplication rec {
   pname = "hdl_checker";

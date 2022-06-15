@@ -25,7 +25,7 @@ buildPythonPackage rec {
     homepage = "https://kevinpt.github.io/hdlparse/";
     description = "Rudimentary parser for VHDL and Verilog";
     license = licenses.mit;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }
 

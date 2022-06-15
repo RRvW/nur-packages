@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, ruamel-yaml, fetchFromGitHub, pytestCheckHook
-, pythonAtLeast }:
+{ lib
+, buildPythonPackage
+, ruamel-yaml
+, fetchFromGitHub
+, pytestCheckHook
+, pythonAtLeast
+}:
 
 buildPythonPackage rec {
   pname = "pytooling";

@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, dill, six, pytestCheckHook, typing
-, pythonAtLeast }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, dill
+, six
+, pytestCheckHook
+, typing
+, pythonAtLeast
+}:
 
 buildPythonPackage rec {
   pname = "pydecor";

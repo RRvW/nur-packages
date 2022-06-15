@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi, gtk3, pango, pycairo, pygobject3, hdlparse
-, pytestCheckHook, wrapGAppsHook, gobject-introspection }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, gtk3
+, pango
+, pycairo
+, pygobject3
+, hdlparse
+, pytestCheckHook
+, wrapGAppsHook
+, gobject-introspection
+}:
 
 buildPythonPackage rec {
   pname = "symbolator";

@@ -14,6 +14,8 @@ rec {
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
+  nvc = pkgs.callPackage ./pkgs/nvc {};
+
   vhdl_ls-bin = pkgs.callPackage ./pkgs/vhdl_ls-bin.nix { };
   vhdl_lang-bin = pkgs.callPackage ./pkgs/vhdl_lang-bin.nix { };
   # rust_hdl = pkgs.callPackage ./pkgs/rust_hdl {}; # broken

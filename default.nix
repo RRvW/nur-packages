@@ -8,7 +8,7 @@
 
 { pkgs ? import <nixpkgs> { } }:
 
-{
+rec {
   # The `lib`, `modules`, and `overlay` names are special
   lib = import ./lib { inherit pkgs; }; # functions
   modules = import ./modules; # NixOS modules
@@ -23,14 +23,21 @@
     pyvhdlmodel = pkgs.python3.pkgs.callPackage ./pkgs/pyvhdlmodel.nix {
       inherit pytooling;
     };
-    pydecor = pkgs.python3.pkgs.callPackage ./pkgs/pydecor.nix {};
+    pydecor = pkgs.python3.pkgs.callPackage ./pkgs/pydecor.nix { };
     pyghdl = pkgs.python3.pkgs.callPackage ./pkgs/pyghdl.nix {
       inherit pyvhdlmodel pytooling pydecor;
     };
     pyghdl-mcode = pyghdl;
     # pyghdl-llvm = pyghdl.override {ghdl = pkgs.ghdl-llvm; }; # ghdl-llvm seems to be broken in nixpkgs :(
 
+    # HDLParse has been yanked from nixpkgs for using removed setuptools options
+    hdlparse = pkgs.python3.pkgs.callPackage ./pkgs/hdlparse { };
+    symbolator =
+      pkgs.python3.pkgs.callPackage ./pkgs/symbolator { hdlparse = hdlparse; };
+    hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix { };
   };
-  hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix {};
-  symbolator = pkgs.python3.pkgs.callPackage ./pkgs/symbolator.nix {};
+
+  hdl_checker = python3Packages.hdl_checker;
+  symbolator = python3Packages.symbolator;
+
 }

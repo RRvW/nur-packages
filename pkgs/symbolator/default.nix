@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, gtk3, pango, python3Packages
+{ lib, buildPythonPackage, fetchPypi, gtk3, pango, pycairo, pygobject3, hdlparse
 , pytestCheckHook, wrapGAppsHook, gobject-introspection }:
 
 buildPythonPackage rec {
@@ -13,7 +13,13 @@ buildPythonPackage rec {
   buildInputs = [ gtk3 pango gobject-introspection ];
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  propagatedBuildInputs = with python3Packages; [ hdlparse pycairo pygobject3 ];
+  propagatedBuildInputs = [ hdlparse pycairo pygobject3 ];
+
+  patches = [ ./2to3.patch ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "use_2to3 = True," ""
+  '';
 
   doCheck = true;
   checkPhase = ''

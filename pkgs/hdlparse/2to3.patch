@@ -1,0 +1,78 @@
+--- hdlparse-1.0.4/hdlparse/minilexer.py	(original)
++++ hdlparse-1.0.4/hdlparse/minilexer.py	(refactored)
+@@ -1,7 +1,7 @@
+ # -*- coding: utf-8 -*-
+ # Copyright © 2017 Kevin Thibedeau
+ # Distributed under the terms of the MIT license
+-from __future__ import print_function
++
+ 
+ import re
+ 
+@@ -22,7 +22,7 @@
+     self.tokens = {}
+ 
+     # Pre-process the state definitions
+-    for state, patterns in tokens.iteritems():
++    for state, patterns in tokens.items():
+       full_patterns = []
+       for p in patterns:
+         pat = re.compile(p[0], flags)
+@@ -33,7 +33,7 @@
+         if new_state and new_state.startswith('#pop'):
+           try:
+             new_state = -int(new_state.split(':')[1])
+-          except IndexError, ValueError:
++          except IndexError as ValueError:
+             new_state = -1
+ 
+         full_patterns.append((pat, action, new_state))
+--- hdlparse-1.0.4/hdlparse/verilog_parser.py	(original)
++++ hdlparse-1.0.4/hdlparse/verilog_parser.py	(refactored)
+@@ -1,10 +1,10 @@
+ # -*- coding: utf-8 -*-
+ # Copyright © 2017 Kevin Thibedeau
+ # Distributed under the terms of the MIT license
+-from __future__ import print_function
++
+ 
+ import re, os, io, ast, pprint, collections
+-from minilexer import MiniLexer
++from .minilexer import MiniLexer
+ 
+ '''Verilog documentation parser'''
+ 
+@@ -198,7 +198,7 @@
+       for i in param_items:
+         ports[i] = VerilogParameter(i, mode, ptype)
+ 
+-      vobj = VerilogModule(name, ports.values(), generics, dict(sections), metacomments)
++      vobj = VerilogModule(name, list(ports.values()), generics, dict(sections), metacomments)
+       objects.append(vobj)
+       last_item = None
+       metacomments = []
+--- hdlparse-1.0.4/hdlparse/vhdl_parser.py	(original)
++++ hdlparse-1.0.4/hdlparse/vhdl_parser.py	(refactored)
+@@ -1,11 +1,11 @@
+ # -*- coding: utf-8 -*-
+ # Copyright © 2017 Kevin Thibedeau
+ # Distributed under the terms of the MIT license
+-from __future__ import print_function
++
+ 
+ import re, os, io, ast
+ from pprint import pprint
+-from minilexer import MiniLexer
++from .minilexer import MiniLexer
+ 
+ '''VHDL documentation parser'''
+ 
+@@ -683,7 +683,7 @@
+     subtypes = {o.name:o.base_type for o in objects if isinstance(o, VhdlSubtype)}
+ 
+     # Find all subtypes of an array type
+-    for k,v in subtypes.iteritems():
++    for k,v in subtypes.items():
+       while v in subtypes: # Follow subtypes of subtypes
+         v = subtypes[v]
+       if v in self.array_types:

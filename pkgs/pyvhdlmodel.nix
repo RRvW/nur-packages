@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyvhdlmodel";
-  version = "0.14.3";
+  version = "0.14.1";
 
   disabled = !(pythonAtLeast "3.6"); # requires python version >=3.6
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "VHDL";
     repo = "pyVHDLModel";
     rev = "v${version}";
-    sha256 = "0rh3c5060c25z6541jv7xvgrp3cq06n2q3v24pdc5ncxfzlizl9r";
+    sha256 = "sha256-Y+CK9Cw80HaKP3OOxEIHHWKtZhEJfbhHfSoxOoiescY=";
   };
 
   meta = with lib; {

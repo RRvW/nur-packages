@@ -14,7 +14,10 @@ rec {
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  nvc = pkgs.callPackage ./pkgs/nvc {};
+  ghdl-mcode = pkgs.callPackage ./pkgs/ghdl { backend = "mcode"; gnat = pkgs.gnat11; }; # GNAT12 build is broken, even with patches
+  ghdl-llvm = pkgs.callPackage ./pkgs/ghdl { backend = "llvm"; gnat = pkgs.gnat11; };
+  ghdl = ghdl-mcode;
+  nvc = pkgs.callPackage ./pkgs/nvc { };
 
   vhdl_ls-bin = pkgs.callPackage ./pkgs/vhdl_ls-bin.nix { };
   vhdl_lang-bin = pkgs.callPackage ./pkgs/vhdl_lang-bin.nix { };
@@ -22,15 +25,17 @@ rec {
 
   python3Packages = pkgs.recurseIntoAttrs rec {
     pytooling = pkgs.python3.pkgs.callPackage ./pkgs/pytooling.nix { };
+    pytoolingTerminalUI = pkgs.python3.pkgs.callPackage ./pkgs/pytooling_terminalui.nix { inherit pytooling; };
+    pyattributes = pkgs.python3.pkgs.callPackage ./pkgs/pyattributes.nix { inherit pytooling; };
     pyvhdlmodel = pkgs.python3.pkgs.callPackage ./pkgs/pyvhdlmodel.nix {
       inherit pytooling;
     };
     pydecor = pkgs.python3.pkgs.callPackage ./pkgs/pydecor.nix { };
     pyghdl = pkgs.python3.pkgs.callPackage ./pkgs/pyghdl.nix {
-      inherit pyvhdlmodel pytooling pydecor;
+      inherit pyvhdlmodel pytooling pydecor pytoolingTerminalUI pyattributes ghdl;
     };
-    pyghdl-mcode = pyghdl;
-    # pyghdl-llvm = pyghdl.override {ghdl = pkgs.ghdl-llvm; }; # ghdl-llvm seems to be broken in nixpkgs :(
+    pyghdl-mcode = pyghdl { };
+    pyghdl-llvm = pyghdl.override { ghdl = ghdl-llvm; }; # ghdl-llvm seems to be broken in nixpkgs :(
 
     # HDLParse has been yanked from nixpkgs for using removed setuptools options
     hdlparse = pkgs.python3.pkgs.callPackage ./pkgs/hdlparse { };

@@ -20,10 +20,10 @@ buildPythonPackage rec {
     sha256 = "cb25c11443536bdd9a998ed2245e143c406591b96ed236d2f2c43941f566752a";
   };
 
-  buildInputs = [ gtk3 pango gobject-introspection ];
-  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs = [ gtk3 pango  ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
 
-  propagatedBuildInputs = [ hdlparse pycairo pygobject3 ];
+  pythonPath = [ hdlparse pycairo pygobject3 ];
 
   patches = [ ./2to3.patch ];
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
     $out/bin/symbolator --version
   '';
   meta = with lib; {
+    broken = true; # cannot import pango
     description = "HDL symbol generator";
     homepage = "https://kevinpt.github.io/symbolator";
     license = licenses.mit;

@@ -34,7 +34,7 @@ rec {
     pyghdl = pkgs.python3.pkgs.callPackage ./pkgs/pyghdl.nix {
       inherit pyvhdlmodel pytooling pydecor pytoolingTerminalUI pyattributes ghdl;
     };
-    pyghdl-mcode = pyghdl { };
+    pyghdl-mcode = pyghdl;
     pyghdl-llvm = pyghdl.override { ghdl = ghdl-llvm; }; # ghdl-llvm seems to be broken in nixpkgs :(
 
     # HDLParse has been yanked from nixpkgs for using removed setuptools options

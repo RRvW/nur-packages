@@ -59,12 +59,27 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru = {
-    # run with either of
-    # nix-build -A ghdl-mcode.passthru.tests
-    # nix-build -A ghdl-llvm.passthru.tests
-    tests = { simple = callPackage ./test-simple.nix { inherit backend; }; };
-  };
+  doCheck = true;
+  checkPhase = let
+    ghdl = "./ghdl_${backend}";
+  in ''
+    export PATH+=":$PWD"
+    ls
+    pwd
+    ls *
+    cp ${./simple.vhd} simple.vhd
+    cp ${./simple-tb.vhd} simple-tb.vhd
+    mkdir -p ghdlwork
+    ${ghdl} -a --workdir=ghdlwork --ieee=synopsys simple.vhd simple-tb.vhd
+    ${ghdl} -e --workdir=ghdlwork --ieee=synopsys -o sim-simple tb
+  '' + (if backend == "llvm" then ''
+    ./sim-simple --assert-level=warning > output.txt
+  '' else ''
+    ${ghdl} -r --workdir=ghdlwork --ieee=synopsys tb > output.txt
+  '') + ''
+    diff output.txt ${./expected-output.txt}
+  '';
+
 
   meta = with lib; {
     broken = (lib.versionAtLeast gnat.version "12.0") || (lib.versionAtLeast llvm.version "14.1");

@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pytooling-terminalui";
-  version = "1.5.9";
+  version = "1.5.8"; # version 1.5.9 required colorama >= 0.4.5, which is not in nixos-22.05
 
   disabled = !(pythonAtLeast "3.7"); # requires python version >=3.7
   propagatedBuildInputs = [ pytooling colorama ];
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "pyTooling.TerminalUI";
     owner = "pyTooling";
     rev = "v${version}";
-    sha256 = "0yl64qvbcmlbnvn2dk9bih3pz8gxy2vdlic68ca6njxwxy77xv2h";
+    sha256 = "0l3m4d8jy8gb8p00099lfghq241bplayz4rwrfmkhcybpbq84bz7";
   };
 
   meta = with lib; {

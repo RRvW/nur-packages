@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.6.2";
+  version = "1.7.1";
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "0m34d16rlq4pk18mbcsypzz5kq70m10hh6sj8r312aac7njhrm86";
+    sha256 = "sha256-OcRwhhX93E8LHUeFzgjGxw6OANACOUJmY4i0JKjtHfI=";
   };
 
   # which is needed to find llvm-config

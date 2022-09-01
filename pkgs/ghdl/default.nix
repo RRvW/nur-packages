@@ -1,4 +1,4 @@
-{ gcc11Stdenv
+{ stdenv
 , fetchFromGitHub
 , fetchpatch
 , callPackage
@@ -11,9 +11,8 @@
 
 assert backend == "mcode" || backend == "llvm";
 
-let stdenv = gcc11Stdenv;
 
-in
+
 stdenv.mkDerivation rec {
   pname = "ghdl-${backend}";
   version = "2.0.0";
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-B/G3FGRzYy4Y9VNNB8yM3FohiIjPJhYSVbqsTN3cL5k=";
   };
-
+  # for compilation with GNAT/GCC 12, the following patches and compilation with `--disable-werror` are required
   patches = [
     (fetchpatch {
       name = "fix-gcc-12-compilation.patch";
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
     sed -i 's/check_version  7.0/check_version  7/g' configure
   '';
 
-  configureFlags = [ "--enable-synth" ] ++ lib.optional (backend == "llvm")
+  configureFlags = [ "--enable-synth" "--disable-werror" ] ++ lib.optional (backend == "llvm")
     "--with-llvm-config=${llvm.dev}/bin/llvm-config";
 
   hardeningDisable = [ "format" ];
@@ -60,29 +59,28 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
-  checkPhase = let
-    ghdl = "./ghdl_${backend}";
-  in ''
-    export PATH+=":$PWD"
-    ls
-    pwd
-    ls *
-    cp ${./simple.vhd} simple.vhd
-    cp ${./simple-tb.vhd} simple-tb.vhd
-    mkdir -p ghdlwork
-    ${ghdl} -a --workdir=ghdlwork --ieee=synopsys simple.vhd simple-tb.vhd
-    ${ghdl} -e --workdir=ghdlwork --ieee=synopsys -o sim-simple tb
-  '' + (if backend == "llvm" then ''
-    ./sim-simple --assert-level=warning > output.txt
-  '' else ''
-    ${ghdl} -r --workdir=ghdlwork --ieee=synopsys tb > output.txt
-  '') + ''
-    diff output.txt ${./expected-output.txt}
-  '';
+  checkPhase =
+    let
+      ghdl = "./ghdl_${backend}";
+    in
+    ''
+      export PATH+=":$PWD"
+      cp ${./simple.vhd} simple.vhd
+      cp ${./simple-tb.vhd} simple-tb.vhd
+      mkdir -p ghdlwork
+      ${ghdl} -a --workdir=ghdlwork --ieee=synopsys simple.vhd simple-tb.vhd
+      ${ghdl} -e --workdir=ghdlwork --ieee=synopsys -o sim-simple tb
+    '' + (if backend == "llvm" then ''
+      ./sim-simple --assert-level=warning > output.txt
+    '' else ''
+      ${ghdl} -r --workdir=ghdlwork --ieee=synopsys tb > output.txt
+    '') + ''
+      diff -q output.txt ${./expected-output.txt}
+    '';
 
 
   meta = with lib; {
-    broken = (lib.versionAtLeast gnat.version "12.0") || (lib.versionAtLeast llvm.version "14.1");
+    broken = (lib.versionAtLeast llvm.version "14.1");
     homepage = "https://github.com/ghdl/ghdl";
     description = "VHDL 2008/93/87 simulator";
     platforms = platforms.linux;

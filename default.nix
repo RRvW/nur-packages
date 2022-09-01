@@ -14,8 +14,8 @@ rec {
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
 
-  ghdl-mcode = pkgs.callPackage ./pkgs/ghdl { backend = "mcode"; gnat = pkgs.gnat11; }; # GNAT12 build is broken, even with patches
-  ghdl-llvm = pkgs.callPackage ./pkgs/ghdl { backend = "llvm"; gnat = pkgs.gnat11; };
+  ghdl-mcode = pkgs.callPackage ./pkgs/ghdl { backend = "mcode"; };
+  ghdl-llvm = pkgs.callPackage ./pkgs/ghdl { backend = "llvm"; };
   ghdl = ghdl-mcode;
   nvc = pkgs.callPackage ./pkgs/nvc { };
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h9kyiiiz00bvih65sspjvirq6rbsgj24q4l0agd7n98ssn3rfgc";
   };
   nativeBuildInputs = [ autoPatchelfHook ];
-
+  broken = true; # cannot find libgcc_s.so.1
   installPhase = ''
     mkdir $out
     cp -r * $out

@@ -19,9 +19,10 @@ rec {
   ghdl = ghdl-mcode;
   nvc = pkgs.callPackage ./pkgs/nvc { };
 
-  vhdl_ls-bin = pkgs.callPackage ./pkgs/vhdl_ls-bin.nix { };
+  rust_hdl = pkgs.callPackage ./pkgs/rust_hdl {}; 
+
+  vhdl_ls-bin = pkgs.callPackage ./pkgs/vhdl_ls-bin.nix {};
   vhdl_lang-bin = pkgs.callPackage ./pkgs/vhdl_lang-bin.nix { };
-  # rust_hdl = pkgs.callPackage ./pkgs/rust_hdl {}; # broken
 
   python3Packages = pkgs.recurseIntoAttrs rec {
     pytooling = pkgs.python3.pkgs.callPackage ./pkgs/pytooling.nix { };

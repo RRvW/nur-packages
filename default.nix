@@ -15,7 +15,7 @@ rec {
   overlays = import ./overlays; # nixpkgs overlays
 
   ghdl-mcode = pkgs.callPackage ./pkgs/ghdl { backend = "mcode"; };
-  ghdl-llvm = pkgs.callPackage ./pkgs/ghdl { backend = "llvm"; };
+  ghdl-llvm = pkgs.callPackage ./pkgs/ghdl { backend = "llvm"; llvm = pkgs.llvmPackages_14.llvm; };
   ghdl = ghdl-mcode;
   nvc = pkgs.callPackage ./pkgs/nvc { };
 

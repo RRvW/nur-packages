@@ -17,12 +17,12 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.6.2";
+  version = "1.8.2";
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "0m34d16rlq4pk18mbcsypzz5kq70m10hh6sj8r312aac7njhrm86";
+    sha256 = "sha256-s7QgufD3sQ6sZh2H78E8x0dMidHRKHUm8tASXoKK3xk=";
   };
 
   # which is needed to find llvm-config
@@ -30,12 +30,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses llvm libffi zlib elfutils ]; # elfutils provides libdw
 
   configureFlags = [
-    "--disable-vhpi" # fails the internal test suite with undefined symbol
+    #    "--disable-vhpi" # fails the internal test suite with undefined symbol
     "--disable-lto" # LTO gives errors about missing plugin
     "--enable-vital"
   ];
 
   checkInputs = [ check ];
+
+  configurePhase = ''
+    mkdir build
+    cd build
+    ../configure $configureFlags
+
+  '';
 
   doCheck = true;
   checkPhase = ''

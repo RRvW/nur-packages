@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [ check ];
-
+  broken = true;
   configurePhase = ''
     mkdir build
     cd build

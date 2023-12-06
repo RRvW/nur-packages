@@ -12,15 +12,7 @@
 
 buildPythonPackage {
   src = ghdl.src;
-  patches = [
-    (fetchpatch {
-      name = "fix-ghdl-dom-singleton-import.patch";
-      url =
-        "https://github.com/ghdl/ghdl/commit/e35bc1bd8b4a60e5a3c18aeb5e8747a123c5a13b.patch";
-      sha256 = "sha256-ozY9QE4sP3yPcX1tEXVO/7AKQpMDIYLVKGF7h8ttVWQ=";
-    })
 
-  ];
   pname = "pyGHDL";
   version = ghdl.version;
   paths = [ ghdl.all ];

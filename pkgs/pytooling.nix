@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pytooling";
-  version = "2.12.3";
+  version = "2.13.0";
 
   disabled = !(pythonAtLeast "3.7"); # requires python version >=3.7
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pyTooling";
     repo = "pyTooling";
     rev = "v${version}";
-    sha256 = "sha256-ESdt266rFLQ3/7DA1LKYPQItOepQtR1GdV+RVjDn4Ws=";
+    sha256 = "sha256-T5bfqPIi9V4T/oM8ZIcuaQf7CYrFpZWk8hyuIYVJZ+8=";
   };
 
   doCheck =

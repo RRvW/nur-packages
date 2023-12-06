@@ -4,6 +4,7 @@
 , python3Packages
 , pytestCheckHook
 , ghdl
+, pygls
 }:
 
 buildPythonApplication rec {
@@ -34,15 +35,7 @@ buildPythonApplication rec {
     bottle
     requests
     waitress
-    (pygls.overrideAttrs (old: rec {
-      version = "0.9.1";
-      src = fetchFromGitHub {
-        owner = "openlawlibrary";
-        repo = pname;
-        rev = "v${version}";
-        sha256 = "1v7x5598d6jg8ya0spqjma56y062rznwimsrp8nq6fkskqgfm0ds";
-      };
-    }))
+	pygls
     tabulate
     six
     argcomplete

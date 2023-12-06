@@ -25,6 +25,7 @@ rec {
   #vhdl_lang-bin = pkgs.callPackage ./pkgs/vhdl_lang-bin.nix { };
 
   python3Packages = pkgs.recurseIntoAttrs rec {
+    pygls = pkgs.python3.pkgs.callPackage ./pkgs/pygls.nix { };
     pytooling = pkgs.python3.pkgs.callPackage ./pkgs/pytooling.nix { };
     pytoolingTerminalUI = pkgs.python3.pkgs.callPackage ./pkgs/pytooling_terminalui.nix { inherit pytooling; };
     pyattributes = pkgs.python3.pkgs.callPackage ./pkgs/pyattributes.nix { inherit pytooling; };
@@ -42,7 +43,7 @@ rec {
     hdlparse = pkgs.python3.pkgs.callPackage ./pkgs/hdlparse { };
     symbolator =
       pkgs.python3.pkgs.callPackage ./pkgs/symbolator { hdlparse = hdlparse; };
-    hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix { };
+    hdl_checker = pkgs.python3.pkgs.callPackage ./pkgs/hdl_checker.nix { inherit pygls; };
   };
 
   hdl_checker = python3Packages.hdl_checker;

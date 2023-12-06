@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [ check ];
-  broken = true;
   configurePhase = ''
     mkdir build
     cd build
@@ -50,6 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = true;
     description = "VHDL compiler and simulator";
     homepage = "https://www.nickg.me.uk/nvc/";
     license = lib.licenses.gpl3;

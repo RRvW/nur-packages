@@ -35,7 +35,7 @@ buildPythonApplication rec {
     bottle
     requests
     waitress
-	pygls
+    pygls
     tabulate
     six
     argcomplete

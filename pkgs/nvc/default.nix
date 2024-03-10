@@ -13,35 +13,46 @@
 , libtool
 , zlib
 , elfutils
+, zstd
+, enableTcl ? false
+, tcl
+, enableWebsocketServer ? false # requires TCL
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.8.2";
+  version = "1.11.3";
   src = fetchFromGitHub {
     owner = "nickg";
     repo = pname;
     rev = "r${version}";
-    sha256 = "sha256-s7QgufD3sQ6sZh2H78E8x0dMidHRKHUm8tASXoKK3xk=";
+    sha256 = "sha256-Z4YxXPf8uKlASSK9v6fbtHtkUibc9EeA4i+3kD/vBmY=";
   };
 
   # which is needed to find llvm-config
   nativeBuildInputs = [ pkg-config flex autoreconfHook which gettext libtool ];
-  buildInputs = [ ncurses llvm libffi zlib elfutils ]; # elfutils provides libdw
+
+  # elfutils provides libdw
+  buildInputs = [ ncurses llvm libffi zlib zstd.dev zstd.out elfutils ]
+    ++ lib.optional enableTcl tcl
+  ;
 
   configureFlags = [
     #    "--disable-vhpi" # fails the internal test suite with undefined symbol
     "--disable-lto" # LTO gives errors about missing plugin
     "--enable-vital"
+    (lib.enableFeature enableTcl "tcl")
+    (lib.enableFeature enableWebsocketServer "server")
   ];
 
   checkInputs = [ check ];
-  configurePhase = ''
+
+  # nvc requires compilation in a subdirectory
+  preConfigure = ''
     mkdir build
     cd build
-    ../configure $configureFlags
-
   '';
+  configureScript = "../configure";
 
   doCheck = true;
   checkPhase = ''
@@ -49,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    broken = true;
+    #    broken = true;
     description = "VHDL compiler and simulator";
     homepage = "https://www.nickg.me.uk/nvc/";
     license = lib.licenses.gpl3;

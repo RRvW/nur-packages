@@ -17,6 +17,8 @@
 , enableTcl ? false
 , tcl
 , enableWebsocketServer ? false # requires TCL
+# these need to be ran on the host, thus disable when cross-compiling
+, doCheck ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  doCheck = true;
+  inherit doCheck;
   checkPhase = ''
     make check
   '';

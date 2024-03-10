@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase =
     let
-      ghdl = "./ghdl_${backend}";
+      ghdl = "../ghdl_${backend}";
     in
     ''
-      export PATH+=":$PWD"
+      mkdir tmp
+      cd tmp
       cp ${./simple.vhd} simple.vhd
       cp ${./simple-tb.vhd} simple-tb.vhd
       mkdir -p ghdlwork
@@ -58,7 +59,9 @@ stdenv.mkDerivation rec {
     '' else ''
       ${ghdl} -r --workdir=ghdlwork --ieee=synopsys tb > output.txt
     '') + ''
-      diff -q output.txt ${./expected-output.txt}
+      diff -q output.txt ${./expected-output.txt} || exit 1
+      cd ../
+      rm -rf tmp
     '';
 
 

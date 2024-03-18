@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnat zlib ] ++ lib.optional (backend == "llvm") [ llvm ];
   propagatedBuildInputs = lib.optionals (backend == "llvm") [ zlib ];
+  preferLocalBuild = true; # BUG: causes "cannot unlink CI errors"
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.
